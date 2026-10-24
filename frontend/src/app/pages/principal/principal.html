@@ -1,0 +1,100 @@
+<div class="contenedor-pos">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <!-- Logo -->
+    <div class="marca-sidebar">
+      <div class="logo-mini">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 3h7v1H4v8h8V6h1v7H3V3z" fill="#EAB308"/>
+          <path d="M6 5h4v.8H6zM6 7h4v.8H6z" fill="#1E2A4A"/>
+        </svg>
+      </div>
+      <div class="textos-marca">
+        <span class="titulo-marca">Bazar Rosita</span>
+        <span class="subtitulo-marca">Papelería escolar</span>
+      </div>
+    </div>
+
+    <!-- Opciones -->
+    <nav class="nav-sidebar">
+      <span class="seccion-menu">Operación</span>
+      @for (op of opcionesVisibles; track op.id) {
+        <button
+          type="button"
+          class="item-menu"
+          [class.activo]="menuActivo() === op.id"
+          [class.bloqueado]="op.requiereCaja && !sesion.cajaAbierta"
+          (click)="seleccionar(op)">
+          <i class="bi" [ngClass]="op.icono"></i>
+          <span>{{ op.label }}</span>
+          @if (op.requiereCaja && !sesion.cajaAbierta) {
+            <i class="bi bi-lock-fill candado" title="Requiere caja abierta"></i>
+          }
+        </button>
+      }
+    </nav>
+
+    <!-- Pie con usuario -->
+    <div class="pie-sidebar">
+      <button type="button" class="btn-cerrar" (click)="cerrarSesion()">
+        <i class="bi bi-box-arrow-left"></i>
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= ÁREA PRINCIPAL ================= -->
+  <div class="area-principal">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="titulo-vista">
+        <h2 class="font-titulo">{{ tituloVista }}</h2>
+        <span class="ruta">Punto de venta</span>
+      </div>
+
+      <div class="datos-header">
+        <!-- Indicador de caja -->
+        @if (sesion.cajaAbierta) {
+          <span class="indicador-caja abierta">
+            <i class="bi bi-unlock-fill"></i>
+            {{ sesion.sesionCaja()?.nombreCaja }} · Caja abierta
+          </span>
+        } @else {
+          <span class="indicador-caja cerrada">
+            <i class="bi bi-lock-fill"></i>
+            Caja cerrada
+          </span>
+        }
+
+        <!-- Usuario -->
+        <div class="usuario-header">
+          <div class="avatar-usuario">
+            {{ sesion.usuario()?.nombres?.charAt(0) }}{{ sesion.usuario()?.apellidoPaterno?.charAt(0) }}
+          </div>
+          <div class="textos-usuario">
+            <span class="nombre-usuario">
+              {{ sesion.usuario()?.nombres }} {{ sesion.usuario()?.apellidoPaterno }}
+            </span>
+            <span class="rol-usuario">{{ sesion.usuario()?.rol }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="contenido">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>
+
+<!-- Aviso flotante -->
+@if (aviso()) {
+  <div class="aviso-flotante aviso-ok">
+    <i class="bi bi-info-circle-fill"></i>
+    {{ aviso() }}
+  </div>
+}

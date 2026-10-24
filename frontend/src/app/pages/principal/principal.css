@@ -1,0 +1,258 @@
+/* ===== Layout del POS: sidebar fijo de 220px ===== */
+.contenedor-pos {
+  display: flex;
+  min-height: 100vh;
+  background: var(--fondo);
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: var(--tinta);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 40;
+}
+
+.marca-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 18px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.logo-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+  background: rgba(201, 74, 109, 0.2);
+  border: 1px solid rgba(201, 74, 109, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.textos-marca {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.titulo-marca {
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.15;
+}
+
+.subtitulo-marca {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.68rem;
+}
+
+/* --- Navegación --- */
+.nav-sidebar {
+  flex: 1;
+  padding: 14px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.seccion-menu {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  padding: 4px 10px 8px;
+}
+
+.item-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.72);
+  padding: 9px 10px;
+  border-radius: 9px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.13s ease;
+}
+
+.item-menu i {
+  font-size: 0.95rem;
+  width: 18px;
+  text-align: center;
+}
+
+.item-menu:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.item-menu.activo {
+  background: rgba(255, 178, 63, 0.16);
+  color: var(--amarillo);
+  font-weight: 600;
+}
+
+/* RNF: opciones que exigen caja abierta, cuando la caja está cerrada */
+.item-menu.bloqueado {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.item-menu.bloqueado:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.candado {
+  margin-left: auto;
+  font-size: 0.7rem !important;
+  opacity: 0.7;
+}
+
+/* --- Pie --- */
+.pie-sidebar {
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-cerrar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  background: rgba(229, 72, 77, 0.14);
+  border: 1px solid rgba(229, 72, 77, 0.25);
+  color: #F5A3A6;
+  padding: 9px 11px;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.13s ease;
+}
+
+.btn-cerrar:hover {
+  background: rgba(229, 72, 77, 0.24);
+  color: #fff;
+}
+
+/* ================= ÁREA PRINCIPAL ================= */
+.area-principal {
+  flex: 1;
+  margin-left: 220px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* --- Header --- */
+.header {
+  background: #fff;
+  border-bottom: 1px solid var(--borde-suave);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.titulo-vista h2 {
+  font-size: 1.2rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ruta {
+  color: var(--texto-suave);
+  font-size: 0.74rem;
+}
+
+.datos-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Indicador de caja */
+.indicador-caja {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.indicador-caja.abierta {
+  background: var(--menta-pale);
+  color: var(--menta);
+}
+
+.indicador-caja.cerrada {
+  background: var(--rojo-pale);
+  color: var(--rojo);
+}
+
+/* Usuario */
+.usuario-header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.avatar-usuario {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--tinta);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.textos-usuario {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.nombre-usuario {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--tinta);
+}
+
+.rol-usuario {
+  font-size: 0.7rem;
+  color: var(--texto-suave);
+}
+
+/* --- Contenido --- */
+.contenido {
+  flex: 1;
+  padding: 20px 24px;
+}

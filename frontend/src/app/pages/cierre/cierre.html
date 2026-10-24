@@ -1,0 +1,215 @@
+<div class="vista-cierre">
+
+  <!-- ===== ENCABEZADO + PASOS ===== -->
+  <div class="encabezado">
+    <h1 class="font-titulo">Cierre de caja (X out)</h1>
+    <div class="pasos">
+      @for (p of [1, 2]; track p) {
+        <div class="paso">
+          <span class="circulo" [class.activo]="paso() >= p">{{ p }}</span>
+          @if (p < 2) {
+            <span class="linea" [class.activa]="paso() > p"></span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <p class="subtitulo">Valida las ventas del día y el fondo final para cerrar la caja</p>
+
+  @if (cargando()) {
+    <div class="estado-carga"><i class="bi bi-arrow-repeat girar"></i> Cargando cierre…</div>
+  }
+
+  @if (error()) {
+    <div class="estado-error"><i class="bi bi-exclamation-triangle-fill"></i> {{ error() }}</div>
+  }
+
+  @if (estado(); as est) {
+
+    <!-- ===== BLOQUEOS RF-41 ===== -->
+    @if (!est.cerrada && bloqueos.length > 0) {
+      <div class="bloqueos">
+        <p class="titulo-bloqueo">Completa los pasos pendientes antes de cerrar:</p>
+        <ul>
+          @for (b of bloqueos; track b) {
+            <li><i class="bi bi-dot"></i> {{ b }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!-- ===== CAJA YA CERRADA (RF-44: solo reimpresión) ===== -->
+    @if (est.cerrada) {
+      <div class="tarjeta centrada">
+        <div class="icono-ok"><i class="bi bi-check-lg"></i></div>
+        <h2 class="titulo-ok">Caja cerrada</h2>
+        <p class="texto-ok">
+          El X out ha sido generado e impreso automáticamente
+          @if (est.fechaCierre) { · {{ est.fechaCierre }} }
+        </p>
+
+        <div class="acciones">
+          <button type="button" class="btn-contorno" (click)="imprimirXOut()">
+            <i class="bi bi-printer"></i> Reimprimir X out
+          </button>
+          <button type="button" class="btn-enlace" (click)="alternarAnteriores()">
+            {{ mostrarAnteriores() ? 'Ocultar' : 'Ver' }} cierres anteriores
+          </button>
+        </div>
+
+        @if (mostrarAnteriores() && est.anteriores.length > 0) {
+          <div class="lista-anteriores">
+            @for (c of est.anteriores; track c.idSesion) {
+              <div class="fila-anterior">
+                <span>Cierre · {{ c.fechaCierre }}</span>
+                <span class="total-anterior">
+                  Efectivo {{ soles(c.efectivo) }} · Transf. {{ soles(c.transferencias) }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    } @else {
+
+      <!-- ============ PASO 1: CHECKLIST (RF-42) ============ -->
+      @if (paso() === 1) {
+        <div class="tarjeta">
+          <h2 class="titulo-paso">Paso 1: Verificar ventas del día</h2>
+          <p class="texto-paso">Marca todas las ventas del día y luego presiona Aceptar.</p>
+
+          @if (ventas.length === 0) {
+            <p class="sin-ventas">No hay ventas registradas hoy.</p>
+          } @else {
+            <label class="marca-todas">
+              <input
+                type="checkbox"
+                [checked]="todasMarcadas"
+                (change)="marcarTodas($event)" />
+              <span>Marcar todas ({{ ventas.length }})</span>
+            </label>
+
+            <div class="lista-ventas">
+              @for (v of ventas; track v.idVenta) {
+                <label class="fila-venta">
+                  <input
+                    type="checkbox"
+                    [checked]="marcadas().has(v.idVenta)"
+                    (change)="alternar(v.idVenta)" />
+                  <div class="info-venta">
+                    <span class="correlativo">{{ v.correlativo }}</span>
+                    <span class="hora">{{ v.fecha }}</span>
+                    <span class="badge" [class.interno]="v.metodo === '—'">{{ v.metodo }}</span>
+                  </div>
+                  <span class="total-venta">{{ soles(v.total) }}</span>
+                </label>
+              }
+            </div>
+          }
+
+          <button
+            type="button"
+            class="btn-indigo ancho"
+            [disabled]="bloqueos.length > 0"
+            (click)="aceptarPaso1()">
+            @if (ventas.length === 0) {
+              Continuar
+            } @else {
+              Aceptar ({{ marcadasCount }}/{{ ventas.length }})
+            }
+          </button>
+        </div>
+      }
+
+      <!-- ============ PASO 2: FONDO FINAL (RF-43) ============ -->
+      @if (paso() === 2) {
+        <div class="tarjeta">
+          <h2 class="titulo-paso">Paso 2: Validar cuadre de caja</h2>
+          <p class="texto-paso">Ingresa el fondo de caja para validar el cuadre.</p>
+
+          <div class="resumen">
+            <div class="fila-resumen">
+              <span>Fondo inicial</span><span>{{ soles(est.fondoInicial) }}</span>
+            </div>
+            <div class="fila-resumen">
+              <span>Ventas efectivo</span><span class="positivo">+ {{ soles(est.efectivoDelDia) }}</span>
+            </div>
+            <div class="fila-resumen">
+              <span>Transferencias</span><span class="indigo">{{ soles(est.transferencias) }}</span>
+            </div>
+            <div class="fila-resumen">
+              <span>Desembolsos</span><span class="negativo">− {{ soles(est.desembolsos) }}</span>
+            </div>
+            <div class="fila-resumen total">
+              <span>Fondo esperado en caja</span><span>{{ soles(est.fondoEsperado) }}</span>
+            </div>
+          </div>
+
+          <label class="etiqueta-campo" for="fondoFinal">Fondo de caja ingresado (S/)</label>
+          <div class="grupo-campo">
+            <span class="prefijo">S/</span>
+            <input
+              id="fondoFinal"
+              type="number"
+              min="0"
+              step="0.01"
+              class="campo-moneda"
+              placeholder="0.00"
+              [ngModel]="fondoIngresado()"
+              (ngModelChange)="fondoIngresado.set($event); aviso.set(null)" />
+          </div>
+
+          @if (diferencia !== null) {
+            @if (diferencia === 0) {
+              <p class="dif cuadra">✓ Cuadra perfectamente</p>
+            } @else {
+              <p class="dif" [class.faltante]="diferencia! < 0">
+                {{ diferencia! > 0 ? 'Sobrante' : 'Faltante' }}: {{ soles(diferencia!) }}
+              </p>
+            }
+          }
+
+          <div class="acciones">
+            <button type="button" class="btn-contorno" (click)="volverPaso1()">Atrás</button>
+            <button
+              type="button"
+              class="btn-cerrar"
+              [disabled]="confirmando() || fondoIngresado() === ''"
+              (click)="cerrarCaja()">
+              @if (confirmando()) {
+                <i class="bi bi-arrow-repeat girar"></i> Cerrando…
+              } @else {
+                <i class="bi bi-printer"></i> Cerrar caja e imprimir X out
+              }
+            </button>
+          </div>
+        </div>
+      }
+    }
+
+    @if (aviso(); as a) {
+      <p class="aviso" [class.error]="a.tipo === 'error'" [class.ok]="a.tipo === 'ok'">{{ a.texto }}</p>
+    }
+
+    <!-- Cierres anteriores también disponibles con la caja aún abierta (RF-44) -->
+    @if (!est.cerrada && est.anteriores.length > 0) {
+      <div class="tarjeta">
+        <button type="button" class="btn-enlace" (click)="alternarAnteriores()">
+          {{ mostrarAnteriores() ? 'Ocultar' : 'Ver' }} cierres anteriores ({{ est.anteriores.length }})
+        </button>
+        @if (mostrarAnteriores()) {
+          <div class="lista-anteriores">
+            @for (c of est.anteriores; track c.idSesion) {
+              <div class="fila-anterior">
+                <span>Cierre · {{ c.fechaCierre }}</span>
+                <span class="total-anterior">
+                  Efectivo {{ soles(c.efectivo) }} · Transf. {{ soles(c.transferencias) }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

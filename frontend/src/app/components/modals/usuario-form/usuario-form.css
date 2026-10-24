@@ -1,0 +1,113 @@
+/* Modal de formulario de usuario */
+.cabecera-modal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1.3rem 1.4rem 0;
+}
+
+.icono-modal {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  background: var(--indigo-pale);
+  color: var(--indigo);
+}
+
+.modal-titulo {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.modal-subtitulo {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  margin: 2px 0 0;
+}
+
+.modal-body-c {
+  padding: 1rem 1.4rem 1.2rem;
+}
+
+.modal-footer-c {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0.9rem 1.4rem;
+  border-top: 1px solid var(--borde-suave);
+  background: #FCFBF8;
+}
+
+.fila-campos {
+  display: flex;
+  gap: 12px;
+}
+
+.flex-1 { flex: 1; min-width: 0; }
+
+.form-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--tinta);
+}
+
+.nota-campo {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--tinta-muted);
+  margin-top: 4px;
+}
+
+.nota-campo i { color: var(--menta); }
+
+/* --- campo contraseña --- */
+.grupo-clave {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.grupo-clave > i {
+  position: absolute;
+  left: 13px;
+  color: var(--tinta-muted);
+  font-size: 0.85rem;
+  z-index: 2;
+}
+
+.grupo-clave .form-control {
+  padding-left: 36px;
+  padding-right: 40px;
+}
+
+.btn-ojo {
+  position: absolute;
+  right: 6px;
+  border: none;
+  background: transparent;
+  color: var(--tinta-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  z-index: 2;
+}
+
+.btn-ojo:hover { color: var(--indigo); }
+
+/* --- error --- */
+.alerta-error-modal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--rojo-pale);
+  color: var(--rojo);
+  border: 1px solid rgba(229, 72, 77, 0.25);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}

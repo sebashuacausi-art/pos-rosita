@@ -1,0 +1,134 @@
+<div class="vista-usuarios">
+
+  <!-- ===== ENCABEZADO ===== -->
+  <div class="encabezado">
+    <div>
+      <h1 class="font-titulo">Usuarios</h1>
+      <p class="subtitulo">Gestión del personal y sus roles de acceso</p>
+    </div>
+    <button type="button" class="btn-nuevo" (click)="nuevo()">
+      <i class="bi bi-person-plus-fill"></i> Nuevo usuario
+    </button>
+  </div>
+
+  <!-- ===== AVISO ===== -->
+  @if (aviso(); as a) {
+    <div class="aviso" [class.error]="a.tipo === 'error'" [class.ok]="a.tipo === 'ok'">
+      <i class="bi" [class.bi-check-circle-fill]="a.tipo === 'ok'" [class.bi-exclamation-triangle-fill]="a.tipo === 'error'"></i>
+      {{ a.texto }}
+    </div>
+  }
+
+  <!-- ===== RESUMEN ===== -->
+  <div class="grid-resumen">
+    <div class="tarjeta resumen">
+      <span class="etiqueta-resumen">Usuarios registrados</span>
+      <span class="monto-resumen">{{ lista().length }}</span>
+    </div>
+    <div class="tarjeta resumen">
+      <span class="etiqueta-resumen">Activos</span>
+      <span class="monto-resumen menta">{{ totalActivos }}</span>
+    </div>
+    <div class="tarjeta resumen">
+      <span class="etiqueta-resumen">Inactivos</span>
+      <span class="monto-resumen rojo">{{ lista().length - totalActivos }}</span>
+    </div>
+  </div>
+
+  <!-- ===== BÚSQUEDA + TABLA ===== -->
+  <div class="tarjeta">
+    <div class="barra-superior">
+      <h3 class="titulo-seccion">Listado de usuarios</h3>
+      <div class="buscador">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Buscar por ID, nombre o rol…"
+          [(ngModel)]="buscando" />
+      </div>
+    </div>
+
+    @if (cargando()) {
+      <div class="estado-carga"><i class="bi bi-arrow-repeat girar"></i> Cargando usuarios…</div>
+    }
+
+    @if (error()) {
+      <div class="estado-error">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        {{ error() }}
+      </div>
+    }
+
+    @if (!cargando() && !error()) {
+      @if (usuariosFiltrados.length === 0) {
+        <div class="vacio">
+          <i class="bi bi-people"></i>
+          <p>No se encontraron usuarios</p>
+        </div>
+      } @else {
+        <div class="tabla-envoltura">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th>ID de acceso</th>
+                <th>Nombre completo</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th class="derecha">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of usuariosFiltrados; track u.idUsuario) {
+                <tr [class.fila-inactivo]="u.estado !== 'Activo'">
+                  <td>
+                    <span class="chip-id">{{ u.idUsuario }}</span>
+                  </td>
+                  <td>
+                    <span class="nombre">{{ u.nombres }} {{ u.apellidoPaterno }}</span>
+                  </td>
+                  <td>
+                    <span class="badge-rol" [class.dueño]="u.rol === 'Dueño'">
+                      <i class="bi" [class.bi-shield-fill-check]="u.rol === 'Dueño'" [class.bi-person-badge]="u.rol !== 'Dueño'"></i>
+                      {{ u.rol }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (u.estado === 'Activo') {
+                      <span class="estado activo"><i class="bi bi-circle-fill"></i> Activo</span>
+                    } @else {
+                      <span class="estado inactivo"><i class="bi bi-circle-fill"></i> Inactivo</span>
+                    }
+                  </td>
+                  <td class="derecha acciones">
+                    <button
+                      type="button"
+                      class="btn-accion editar"
+                      title="Editar usuario"
+                      (click)="editar(u)">
+                      <i class="bi bi-pencil-fill"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn-accion"
+                      [class.desactivar]="u.estado === 'Activo'"
+                      [class.activar]="u.estado !== 'Activo'"
+                      [title]="u.estado === 'Activo' ? 'Desactivar' : 'Reactivar'"
+                      (click)="cambiarEstado(u)">
+                      <i class="bi" [class.bi-person-dash-fill]="u.estado === 'Activo'" [class.bi-person-check-fill]="u.estado !== 'Activo'"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+
+    <p class="nota-seguridad">
+      <i class="bi bi-shield-lock-fill"></i>
+      Las contraseñas se almacenan con hash y sal (RNF-05), nunca en texto plano,
+      y no pueden verse en pantalla. El acceso a este módulo es exclusivo del Dueño (RNF-06).
+    </p>
+  </div>
+</div>

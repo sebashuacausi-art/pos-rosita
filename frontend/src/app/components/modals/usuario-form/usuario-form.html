@@ -1,0 +1,104 @@
+<div class="cabecera-modal">
+  <div class="icono-modal">
+    <i class="bi bi-person-plus-fill"></i>
+  </div>
+  <div>
+    <h3 class="modal-titulo">{{ esEdicion() ? 'Editar usuario' : 'Nuevo usuario' }}</h3>
+    <p class="modal-subtitulo">
+      {{ esEdicion() ? 'Actualice los datos del usuario' : 'Registre a un nuevo miembro del personal' }}
+    </p>
+  </div>
+</div>
+
+<div class="modal-body-c">
+  <div class="fila-campos">
+    <div class="mb-3 flex-1">
+      <label class="form-label" for="idUsuario">ID de acceso</label>
+      <input
+        id="idUsuario"
+        name="idUsuario"
+        type="number"
+        min="1"
+        class="form-control"
+        placeholder="Ej. 777888"
+        [disabled]="esEdicion()"
+        [(ngModel)]="form.idUsuario" />
+      @if (esEdicion()) {
+        <small class="nota-campo">El ID de acceso no se puede modificar.</small>
+      } @else {
+        <small class="nota-campo">Será el número con el que ingrese al sistema.</small>
+      }
+    </div>
+
+    <div class="mb-3 flex-1">
+      <label class="form-label" for="idRol">Rol</label>
+      <select id="idRol" name="idRol" class="form-select" [(ngModel)]="form.idRol">
+        @for (r of roles(); track r.idRol) {
+          <option [ngValue]="r.idRol">{{ r.nombreRol }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="fila-campos">
+    <div class="mb-3 flex-1">
+      <label class="form-label" for="nombres">Nombres</label>
+      <input
+        id="nombres"
+        name="nombres"
+        type="text"
+        class="form-control"
+        placeholder="Ej. Ana"
+        [(ngModel)]="form.nombres" />
+    </div>
+
+    <div class="mb-3 flex-1">
+      <label class="form-label" for="apellido">Apellido paterno</label>
+      <input
+        id="apellido"
+        name="apellidoPaterno"
+        type="text"
+        class="form-control"
+        placeholder="Ej. Quispe"
+        [(ngModel)]="form.apellidoPaterno" />
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="clave">Contraseña</label>
+    <div class="grupo-clave">
+      <i class="bi bi-lock-fill"></i>
+      <input
+        id="clave"
+        name="clave"
+        [type]=" mostrarClave() ? 'text' : 'password'"
+        class="form-control"
+        [placeholder]="esEdicion() ? 'Déjela vacía para no cambiar' : 'Mínimo 6 caracteres'"
+        [(ngModel)]="form.clave" />
+      <button type="button" class="btn-ojo" (click)="mostrarClave.set(!mostrarClave())">
+        <i class="bi" [class.bi-eye]="!mostrarClave()" [class.bi-eye-slash]="mostrarClave()"></i>
+      </button>
+    </div>
+    <small class="nota-campo">
+      <i class="bi bi-shield-check"></i>
+      Se guarda cifrada (hash + sal) — nunca en texto plano ni visible en pantalla.
+    </small>
+  </div>
+
+  @if (error()) {
+    <div class="alerta-error-modal">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ error() }}</span>
+    </div>
+  }
+</div>
+
+<div class="modal-footer-c">
+  <button type="button" class="btn btn-contorno" (click)="activa.dismiss()" [disabled]="cargando()">
+    Cancelar
+  </button>
+  <button type="button" class="btn btn-amarillo" (click)="guardar()" [disabled]="cargando()">
+    @if (cargando()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+    {{ esEdicion() ? 'Guardar cambios' : 'Registrar usuario' }}
+  </button>
+</div>

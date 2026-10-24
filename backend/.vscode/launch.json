@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PosRositaApplication<posrosita>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "pe.edu.upn.sowad.posrosita.PosRositaApplication",
+            "projectName": "posrosita",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,0 +1,189 @@
+<div class="pos-venta">
+
+  <!-- ==================== COLUMNA IZQUIERDA: CATÁLOGO ==================== -->
+  <section class="panel-catalogo">
+
+    <!-- Búsqueda y filtros -->
+    <div class="barra-busqueda">
+      <div class="caja-busqueda">
+        <i class="bi bi-search icono-busqueda"></i>
+        <input
+          type="text"
+          class="form-control campo-busqueda"
+          placeholder="Buscar por nombre o código (SKU)..."
+          [ngModel]="textoBusqueda()"
+          (ngModelChange)="textoBusqueda.set($event)"
+          (keyup.enter)="buscar()" />
+        @if (textoBusqueda()) {
+          <button type="button" class="btn-limpiar" (click)="textoBusqueda.set(''); buscar()">
+            <i class="bi bi-x"></i>
+          </button>
+        }
+      </div>
+      <button type="button" class="btn btn-indigo" (click)="buscar()">
+        <i class="bi bi-search"></i> Buscar
+      </button>
+    </div>
+
+    <!-- Categorías -->
+    <div class="filtros-categoria">
+      <button
+        type="button"
+        class="chip-categoria"
+        [class.activo]="categoriaSel() === null"
+        (click)="filtrarPorCategoria(null)">
+        Todas
+      </button>
+      @for (c of categorias(); track c.id) {
+        <button
+          type="button"
+          class="chip-categoria"
+          [class.activo]="categoriaSel() === c.id"
+          (click)="filtrarPorCategoria(c.id)">
+          {{ c.nombre }}
+        </button>
+      }
+    </div>
+
+    <!-- Grid de productos -->
+    @if (cargandoCatalogo()) {
+      <div class="cargando-catalogo">
+        <span class="spinner-border text-primary"></span>
+        <span>Cargando productos...</span>
+      </div>
+    } @else if (productosVisibles().length === 0) {
+      <div class="vacio">
+        <i class="bi bi-box-seam"></i>
+        <p>No se encontraron productos</p>
+      </div>
+    } @else {
+      <div class="grid-productos">
+        @for (p of productosVisibles(); track p.idProducto) {
+          <button
+            type="button"
+            class="tarjeta-producto"
+            [class.sin-stock]="p.disponible <= 0"
+            [class.stock-bajo]="p.disponible > 0 && p.disponible <= p.stockMinimo"
+            (click)="agregar(p)">
+            <span class="codigo-producto">{{ p.codigoProducto }}</span>
+            <span class="nombre-producto">{{ p.nombreProducto }}</span>
+            <span class="categoria-producto">{{ p.categoria }}</span>
+            <div class="pie-producto">
+              <span class="precio-producto">S/ {{ p.precioUnitario | number:'1.2-2' }}</span>
+              @if (p.disponible <= 0) {
+                <span class="badge-rojo badge-stock">Sin stock</span>
+              } @else if (p.disponible <= p.stockMinimo) {
+                <span class="badge-amarillo badge-stock">{{ p.disponible }} uds</span>
+              } @else {
+                <span class="stock-ok"><i class="bi bi-check-circle"></i> {{ p.disponible }}</span>
+              }
+            </div>
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+  <!-- ==================== COLUMNA DERECHA: CARRITO ==================== -->
+  <aside class="panel-carrito">
+
+    <div class="cabecera-carrito">
+      <div>
+        <h3 class="titulo-carrito">Carrito</h3>
+        <span class="correlativo-carrito">{{ correlativo() }}</span>
+      </div>
+      @if (carrito().length > 0) {
+        <button type="button" class="btn-vaciar" (click)="vaciarCarrito()">
+          <i class="bi bi-trash"></i> Vaciar
+        </button>
+      }
+    </div>
+
+    <!-- Estado de caja -->
+    @if (!cajaAbierta) {
+      <div class="aviso-caja-cerrada">
+        <i class="bi bi-lock-fill"></i>
+        <div class="texto-aviso">
+          <strong>Caja cerrada</strong>
+          <span>Aperture la caja para poder vender</span>
+        </div>
+        <button type="button" class="btn btn-amarillo btn-sm" (click)="abrirAperturaCaja()">
+          Aperturar
+        </button>
+      </div>
+    }
+
+    <!-- Items del carrito -->
+    @if (carrito().length === 0) {
+      <div class="carrito-vacio">
+        <i class="bi bi-cart3"></i>
+        <p>El carrito está vacío</p>
+        <span>Haga clic en un producto para agregarlo</span>
+      </div>
+    } @else {
+      <div class="lista-carrito">
+        @for (item of carrito(); track item.idProducto) {
+          <div class="item-carrito">
+            <div class="info-item">
+              <span class="nombre-item">{{ item.nombreProducto }}</span>
+              <span class="precio-unitario">S/ {{ item.precioUnitario | number:'1.2-2' }} c/u</span>
+            </div>
+            <div class="controles-item">
+              <button type="button" class="btn-cantidad" (click)="cambiarCantidad(item, -1)">
+                <i class="bi bi-dash-lg"></i>
+              </button>
+              <span class="cantidad-item">{{ item.cantidad }}</span>
+              <button
+                type="button"
+                class="btn-cantidad"
+                (click)="cambiarCantidad(item, 1)"
+                [disabled]="item.cantidad >= item.disponible">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+            </div>
+            <span class="subtotal-item">S/ {{ (item.precioUnitario * item.cantidad) - item.descuento | number:'1.2-2' }}</span>
+            <button type="button" class="btn-quitar" (click)="quitar(item)" title="Quitar">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Totales y cobro -->
+    <div class="pie-carrito">
+      <div class="fila-resumen">
+        <span>Subtotal</span>
+        <span class="monto">S/ {{ total() | number:'1.2-2' }}</span>
+      </div>
+      <div class="fila-resumen">
+        <span>Artículos</span>
+        <span class="monto">{{ totalUnidades() }}</span>
+      </div>
+      <div class="fila-total">
+        <span>Total</span>
+        <span class="monto-total">S/ {{ total() | number:'1.2-2' }}</span>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-amarillo btn-cobrar"
+        [disabled]="carrito().length === 0"
+        (click)="cobrar()">
+        <i class="bi bi-cash-stack me-1"></i> Cobrar
+      </button>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Aviso flotante -->
+@if (aviso(); as a) {
+  <div
+    class="aviso-flotante"
+    [class.aviso-ok]="a.tipo === 'ok'"
+    [class.aviso-error]="a.tipo === 'error'">
+    <i class="bi" [ngClass]="a.tipo === 'ok' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
+    {{ a.texto }}
+  </div>
+}

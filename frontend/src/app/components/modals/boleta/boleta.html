@@ -1,0 +1,116 @@
+<div class="modal-body-boleta">
+
+  <!-- Comprobante -->
+  <div class="boleta" id="zona-impresion">
+    <div class="cabecera-boleta">
+      <div class="logo-boleta">
+        <i class="bi bi-book"></i>
+      </div>
+      <div>
+        <h4 class="negocio-boleta">Librería Bazar Rosita</h4>
+        <p class="dato-negocio">Jr. Los Pinos 123, Lima</p>
+        <p class="dato-negocio">RUC 20512345678</p>
+      </div>
+    </div>
+
+    <div class="linea-punteada"></div>
+
+    <!-- Correlativo y fecha -->
+    <div class="datos-comprobante">
+      <div>
+        <span class="etiqueta-comprobante">Boleta de venta</span>
+        <span class="valor-comprobante">{{ venta().correlativo }}</span>
+      </div>
+      <div class="texto-derecha">
+        <span class="etiqueta-comprobante">Fecha</span>
+        <span class="valor-comprobante">{{ hoy }}</span>
+      </div>
+    </div>
+
+    <div class="linea-punteada"></div>
+
+    <!-- Items -->
+    <table class="tabla-boleta">
+      <thead>
+        <tr>
+          <th>Descripción</th>
+          <th class="centrado">Cant.</th>
+          <th class="derecha">P. Unit.</th>
+          <th class="derecha">Importe</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (d of venta().detalles; track d.codigoProducto) {
+          <tr>
+            <td>
+              <span class="nombre-item">{{ d.nombreProducto }}</span>
+              <span class="codigo-item">{{ d.codigoProducto }}</span>
+            </td>
+            <td class="centrado">{{ d.cantidad }}</td>
+            <td class="derecha">{{ d.precioUnitario | number:'1.2-2' }}</td>
+            <td class="derecha">{{ d.subtotal | number:'1.2-2' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="linea-punteada"></div>
+
+    <!-- Totales -->
+    <div class="totales">
+      <div class="fila-total">
+        <span>Subtotal</span>
+        <span>S/ {{ venta().subtotal | number:'1.2-2' }}</span>
+      </div>
+      <div class="fila-total">
+        <span>Descuento</span>
+        <span>S/ {{ venta().descuentoTotal | number:'1.2-2' }}</span>
+      </div>
+      <div class="fila-total total-final">
+        <span>Total</span>
+        <span>S/ {{ venta().total | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <div class="linea-punteada"></div>
+
+    <!-- Pago -->
+    <div class="datos-pago">
+      <div class="fila-pago">
+        <span>Método</span>
+        <span>{{ metodoPago() }}@if (canalPago()) { <small>({{ canalPago() }})</small> }</span>
+      </div>
+      @if (metodoPago() === 'Efectivo') {
+        <div class="fila-pago">
+          <span>Recibido</span>
+          <span>S/ {{ montoRecibido() | number:'1.2-2' }}</span>
+        </div>
+        <div class="fila-pago">
+          <span>Vuelto</span>
+          <span class="texto-menta">S/ {{ vuelto() | number:'1.2-2' }}</span>
+        </div>
+      } @else {
+        <div class="fila-pago">
+          <span>N° Operación</span>
+          <span>{{ numeroOperacion() }}</span>
+        </div>
+      }
+      <div class="fila-pago">
+        <span>Atendido por</span>
+        <span>{{ sesion.usuario()?.nombres }} {{ sesion.usuario()?.apellidoPaterno }}</span>
+      </div>
+    </div>
+
+    <p class="agradecimiento">¡Gracias por su compra! Vuelva pronto.</p>
+  </div>
+
+</div>
+
+<div class="pie-boleta">
+  <button type="button" class="btn btn-contorno" (click)="imprimir()">
+    <i class="bi bi-printer me-1"></i> Imprimir
+  </button>
+  <button type="button" class="btn btn-amarillo" (click)="activa.close('continuar')">
+    Continuar
+  </button>
+</div>

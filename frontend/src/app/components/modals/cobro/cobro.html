@@ -1,0 +1,162 @@
+<div class="cabecera-cobro">
+  <div>
+    <h3 class="titulo-cobro">Cobrar venta</h3>
+    <p class="subtitulo-cobro">{{ correlativo() }}</p>
+  </div>
+  <div class="monto-total">
+    <span class="etiqueta-total">Total a pagar</span>
+    <span class="valor-total">S/ {{ total() | number:'1.2-2' }}</span>
+  </div>
+</div>
+
+<div class="cuerpo-cobro">
+
+  <!-- ===== Cliente (HU-05, opcional) ===== -->
+  <div class="bloque-cliente">
+    <span class="etiqueta-bloque">
+      <i class="bi bi-person-vcard"></i> Cliente (opcional)
+    </span>
+    <div class="fila-cliente">
+      <select class="form-select select-doc" [(ngModel)]="tipoDoc">
+        <option value="DNI">DNI</option>
+        <option value="CE">CE</option>
+        <option value="RUC">RUC</option>
+      </select>
+      <input
+        type="text"
+        class="form-control input-doc"
+        placeholder="Número de documento"
+        [(ngModel)]="numeroDoc"
+        (keyup.enter)="buscarCliente()"
+        autocomplete="off" />
+      <button type="button" class="btn btn-contorno" (click)="buscarCliente()" [disabled]="buscandoCliente()">
+        @if (buscandoCliente()) {
+          <span class="spinner-border spinner-border-sm"></span>
+        } @else {
+          <i class="bi bi-search"></i>
+        }
+      </button>
+    </div>
+    @if (clienteEncontrado(); as cli) {
+      <div class="cliente-ok">
+        <i class="bi bi-check-circle-fill"></i>
+        {{ cli.nombre }}
+      </div>
+    }
+  </div>
+
+  <!-- ===== Método de pago ===== -->
+  <div class="bloque-metodo">
+    <span class="etiqueta-bloque">Método de pago</span>
+    <div class="opciones-metodo">
+      <button
+        type="button"
+        class="opcion-metodo"
+        [class.seleccionada]="esEfectivo"
+        (click)="metodo = 'Efectivo'">
+        <i class="bi bi-cash-stack"></i>
+        <span>Efectivo</span>
+      </button>
+      <button
+        type="button"
+        class="opcion-metodo"
+        [class.seleccionada]="!esEfectivo"
+        (click)="metodo = 'Transferencia'">
+        <i class="bi bi-phone"></i>
+        <span>Transferencia</span>
+        <small>Yape / Plin / Bancaria</small>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Efectivo ===== -->
+  @if (esEfectivo) {
+    <div class="bloque-efectivo">
+      <label class="form-label">Monto recibido</label>
+      <div class="grupo-moneda">
+        <span class="prefijo-moneda">S/</span>
+        <input
+          type="number"
+          min="0"
+          step="0.10"
+          class="form-control campo-moneda"
+          placeholder="0.00"
+          [(ngModel)]="montoRecibido" />
+      </div>
+
+      <div class="montos-rapidos">
+        @for (m of [total(), 20, 50, 100, 200]; track m) {
+          <button type="button" class="chip-monto" (click)="montoRapido(m)">
+            S/ {{ m | number:'1.2-2' }}
+          </button>
+        }
+      </div>
+
+      <div class="resumen-vuelto" [class.sin-dinero]="faltaPagar">
+        @if (faltaPagar) {
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>Faltan S/ {{ total() - (montoRecibido ?? 0) | number:'1.2-2' }}</span>
+        } @else {
+          <span class="etiqueta-vuelto">Vuelto</span>
+          <span class="valor-vuelto">S/ {{ vuelto | number:'1.2-2' }}</span>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ===== Transferencia ===== -->
+  @if (!esEfectivo) {
+    <div class="bloque-transferencia">
+      <label class="form-label">Canal de transferencia</label>
+      <div class="canales">
+        @for (c of ['Yape', 'Plin', 'Bancaria']; track c) {
+          <button
+            type="button"
+            class="chip-canal"
+            [class.seleccionado]="canal === c"
+            (click)="canal = $any(c)">
+            {{ c }}
+          </button>
+        }
+      </div>
+
+      <div class="mt-3">
+        <label class="form-label">Número de operación</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Ej. YP-123456"
+          [(ngModel)]="numeroOperacion"
+          autocomplete="off" />
+        <div class="form-text">No puede repetirse en el mismo canal (RN-023).</div>
+      </div>
+
+      <label class="check-validado">
+        <input type="checkbox" [(ngModel)]="pagoValidado" />
+        <span>Validé el pago en la app del cliente</span>
+      </label>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="alerta-error-cobro">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+</div>
+
+<div class="pie-cobro">
+  <button type="button" class="btn btn-contorno" (click)="activa.dismiss()" [disabled]="cargando()">
+    Cancelar
+  </button>
+  <button type="button" class="btn btn-amarillo btn-confirmar" (click)="cobrar()" [disabled]="cargando()">
+    @if (cargando()) {
+      <span class="spinner-border spinner-border-sm me-1"></span>
+    } @else {
+      <i class="bi bi-check2-circle me-1"></i>
+    }
+    Confirmar cobro
+  </button>
+</div>

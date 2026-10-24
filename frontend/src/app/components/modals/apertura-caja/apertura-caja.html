@@ -1,0 +1,98 @@
+<div class="cabecera-modal">
+  <div class="icono-modal apertura">
+    <i class="bi bi-unlock-fill"></i>
+  </div>
+  <div>
+    <h3 class="modal-titulo">Aperturar caja</h3>
+    <p class="modal-subtitulo">Abra la caja para poder registrar ventas</p>
+  </div>
+</div>
+
+<div class="modal-body-c">
+
+  @if (paso() === 1) {
+    <!-- ===== PASO 1: elegir caja ===== -->
+    <p class="texto-paso">
+      Seleccione la caja que va a operar:
+      <span class="nota-rol">
+        @if (sesion.usuario()?.rol?.toLowerCase() === 'dueño') {
+          El rol Dueño opera en la Caja 1
+        } @else {
+          El rol Vendedor opera en las cajas 2, 3 y 4
+        }
+      </span>
+    </p>
+
+    <div class="lista-cajas">
+      @for (c of cajas(); track c.idCaja) {
+        <button
+          type="button"
+          class="tarjeta-caja"
+          [class.ocupada]="c.abierta"
+          [disabled]="c.abierta"
+          (click)="elegir(c)">
+          <span class="numero-caja">{{ c.numeroCaja }}</span>
+          <span class="datos-caja">
+            <span class="nombre-caja">{{ c.nombreCaja }}</span>
+            @if (c.abierta) {
+              <span class="estado-caja ocupada">Ya está abierta</span>
+            } @else {
+              <span class="estado-caja libre">Disponible</span>
+            }
+          </span>
+          <i class="bi bi-chevron-right flecha"></i>
+        </button>
+      }
+    </div>
+  }
+
+  @if (paso() === 2) {
+    <!-- ===== PASO 2: confirmar + fondo ===== -->
+    <p class="texto-paso">
+      <strong>{{ cajaElegida()?.nombreCaja }}</strong>
+    </p>
+
+    <div class="confirmacion">
+      <i class="bi bi-question-circle-fill"></i>
+      <span>¿Seguro que desea abrir caja?</span>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="fondo">¿Cuánto es el fondo de caja?</label>
+      <div class="grupo-moneda">
+        <span class="prefijo-moneda">S/</span>
+        <input
+          id="fondo"
+          name="fondo"
+          type="number"
+          min="0"
+          step="0.10"
+          class="form-control campo-moneda"
+          placeholder="0.00"
+          [(ngModel)]="fondoInicial" />
+      </div>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="alerta-error-modal">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+</div>
+
+<div class="modal-footer-c">
+  @if (paso() === 1) {
+    <button type="button" class="btn btn-contorno" (click)="activa.dismiss()">Cancelar</button>
+  } @else {
+    <button type="button" class="btn btn-contorno" (click)="volver()" [disabled]="cargando()">
+      Volver
+    </button>
+    <button type="button" class="btn btn-amarillo" (click)="aceptar()" [disabled]="cargando()">
+      @if (cargando()) { <span class="spinner-border spinner-border-sm me-1"></span> }
+      Aceptar
+    </button>
+  }
+</div>

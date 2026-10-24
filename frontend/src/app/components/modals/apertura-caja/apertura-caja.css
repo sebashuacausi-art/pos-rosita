@@ -1,0 +1,185 @@
+/* Modal de apertura de caja */
+.cabecera-modal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1.3rem 1.4rem 0;
+}
+
+.icono-modal {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.icono-modal.apertura {
+  background: var(--menta-pale);
+  color: var(--menta);
+}
+
+.modal-titulo {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.modal-subtitulo {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  margin: 2px 0 0;
+}
+
+.modal-body-c {
+  padding: 1rem 1.4rem 1.2rem;
+}
+
+.modal-footer-c {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0.9rem 1.4rem;
+  border-top: 1px solid var(--borde-suave);
+  background: #FCFBF8;
+}
+
+.texto-paso {
+  color: var(--tinta-muted);
+  font-size: 0.85rem;
+  margin: 0 0 14px;
+}
+
+.nota-rol {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--indigo);
+  background: var(--indigo-pale);
+  border-radius: 8px;
+  padding: 5px 9px;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* --- Lista de cajas --- */
+.lista-cajas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tarjeta-caja {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 11px 14px;
+  cursor: pointer;
+  transition: all 0.13s ease;
+  text-align: left;
+}
+
+.tarjeta-caja:hover:not(.ocupada) {
+  border-color: var(--indigo);
+  background: var(--indigo-pale);
+}
+
+.tarjeta-caja.ocupada {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--fondo-gris);
+}
+
+.numero-caja {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--tinta);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.datos-caja {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.nombre-caja {
+  font-weight: 600;
+  font-size: 0.87rem;
+  color: var(--tinta);
+}
+
+.estado-caja {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.estado-caja.libre { color: var(--menta); }
+.estado-caja.ocupada { color: var(--rojo); }
+
+.flecha { color: var(--tinta-muted); }
+
+/* --- Confirmación --- */
+.confirmacion {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--amarillo-pale);
+  color: #8A5A0B;
+  border: 1px solid rgba(255, 178, 63, 0.4);
+  border-radius: 11px;
+  padding: 11px 14px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 18px;
+}
+
+.confirmacion i { font-size: 1.1rem; color: var(--amarillo-dark); }
+
+/* --- Campo monetario --- */
+.grupo-moneda {
+  position: relative;
+}
+
+.prefijo-moneda {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--tinta-muted);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.campo-moneda {
+  padding-left: 42px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* --- Error --- */
+.alerta-error-modal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--rojo-pale);
+  color: var(--rojo);
+  border: 1px solid rgba(229, 72, 77, 0.25);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}

@@ -1,0 +1,31 @@
+<div class="cuerpo-exito">
+
+  <div class="icono-exito">
+    <i class="bi bi-check-lg"></i>
+  </div>
+
+  <h3 class="titulo-exito">¡Venta registrada!</h3>
+  <p class="subtitulo-exito">La venta {{ venta().correlativo }} se guardó correctamente</p>
+
+  @if (venta().tieneComprobante) {
+    <span class="etiqueta-comprobante-ok">
+      <i class="bi bi-receipt"></i> Con comprobante
+    </span>
+  } @else {
+    <span class="etiqueta-comprobante-no">
+      <i class="bi bi-exclamation-circle"></i> Sin comprobante (menor a S/ 5.00)
+    </span>
+  }
+
+  <div class="caja-total">
+    <span class="etiqueta-total-exito">Total cobrado</span>
+    <span class="valor-total-exito">S/ {{ venta().total | number:'1.2-2' }}</span>
+  </div>
+
+</div>
+
+<div class="pie-exito">
+  <button type="button" class="btn btn-amarillo w-100" (click)="nuevaVenta()">
+    <i class="bi bi-plus-circle me-1"></i> Nueva venta
+  </button>
+</div>

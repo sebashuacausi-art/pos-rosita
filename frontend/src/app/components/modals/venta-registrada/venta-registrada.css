@@ -1,0 +1,86 @@
+/* Modal de venta registrada (éxito) */
+.cuerpo-exito {
+  padding: 2rem 1.5rem 1.4rem;
+  text-align: center;
+}
+
+.icono-exito {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--menta-pale);
+  color: var(--menta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  animation: pop 0.35s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.titulo-exito {
+  font-size: 1.4rem;
+  margin: 0 0 4px;
+  color: var(--tinta);
+}
+
+.subtitulo-exito {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin: 0 0 14px;
+}
+
+.etiqueta-comprobante-ok,
+.etiqueta-comprobante-no {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.etiqueta-comprobante-ok {
+  background: var(--indigo-pale);
+  color: var(--indigo);
+}
+
+.etiqueta-comprobante-no {
+  background: var(--amarillo-pale);
+  color: #8A5A0B;
+}
+
+.caja-total {
+  margin-top: 20px;
+  background: var(--fondo-gris);
+  border-radius: 13px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.etiqueta-total-exito {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--texto-suave);
+  font-weight: 700;
+}
+
+.valor-total-exito {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+
+.pie-exito {
+  padding: 0 1.5rem 1.5rem;
+}

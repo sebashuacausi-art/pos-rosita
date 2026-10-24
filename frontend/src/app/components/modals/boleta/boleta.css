@@ -1,0 +1,156 @@
+/* Modal de boleta */
+.modal-body-boleta {
+  padding: 1.3rem 1.4rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Papel del comprobante */
+.boleta {
+  width: 100%;
+  max-width: 340px;
+  background: #fff;
+  border: 1px dashed var(--borde);
+  border-radius: 10px;
+  padding: 18px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: #1E2A4A;
+}
+
+.cabecera-boleta {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.logo-boleta {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: var(--tinta);
+  color: var(--amarillo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.negocio-boleta {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  margin: 0;
+  color: var(--tinta);
+}
+
+.dato-negocio {
+  margin: 0;
+  font-size: 0.7rem;
+  color: #555;
+}
+
+.linea-punteada {
+  border-top: 1px dashed #C9C6BC;
+  margin: 10px 0;
+}
+
+/* Correlativo */
+.datos-comprobante {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.texto-derecha { text-align: right; }
+
+.etiqueta-comprobante {
+  display: block;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #777;
+}
+
+.valor-comprobante {
+  display: block;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+/* Items */
+.tabla-boleta {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-boleta th {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 700;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #EEE;
+}
+
+.tabla-boleta td {
+  padding: 5px 0;
+  vertical-align: top;
+  border-bottom: 1px dotted #EEE;
+}
+
+.nombre-item { display: block; font-weight: 600; }
+.codigo-item { display: block; font-size: 0.64rem; color: #999; }
+
+.centrado { text-align: center; }
+.derecha { text-align: right; }
+
+/* Totales */
+.totales { font-size: 0.8rem; }
+
+.fila-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.total-final {
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-top: 4px;
+  padding-top: 5px;
+  border-top: 1px solid #DDD;
+}
+
+/* Pago */
+.datos-pago { font-size: 0.76rem; }
+
+.fila-pago {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.fila-pago span:first-child { color: #777; }
+
+.agradecimiento {
+  text-align: center;
+  margin: 12px 0 0;
+  font-size: 0.72rem;
+  color: var(--tinta-muted);
+  font-style: italic;
+}
+
+/* Pie */
+.pie-boleta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0.9rem 1.4rem;
+  border-top: 1px solid var(--borde-suave);
+  background: #FCFBF8;
+}
+
+@media print {
+  .pie-boleta { display: none !important; }
+  .boleta { border: none; max-width: 100%; }
+}

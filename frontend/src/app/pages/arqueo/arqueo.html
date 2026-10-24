@@ -1,0 +1,191 @@
+<div class="vista-arqueo">
+
+  <!-- ===== ENCABEZADO ===== -->
+  <div class="encabezado">
+    <h1 class="font-titulo">Arqueo de caja</h1>
+    <p class="subtitulo">Verifica el cuadre de caja del día</p>
+  </div>
+
+  @if (cargando()) {
+    <div class="estado-carga"><i class="bi bi-arrow-repeat girar"></i> Calculando arqueo…</div>
+  }
+
+  @if (error()) {
+    <div class="estado-error">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ error() }}
+    </div>
+  }
+
+  @if (calculo(); as c) {
+
+    <!-- ===== BLOQUEO: ventas sin comprobante (RF-36) ===== -->
+    @if (c.pendientesSinComprobante > 0) {
+      <div class="tarjeta bloqueo">
+        <div class="icono-alerta">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <p class="titulo-alerta">Hay ventas sin consolidar</p>
+        <p class="texto-alerta">
+          Debes consolidar las {{ c.pendientesSinComprobante }}
+          venta{{ c.pendientesSinComprobante > 1 ? 's' : '' }} sin comprobante
+          (Total: S/ {{ c.totalSinComprobante.toFixed(2) }}) antes de realizar el arqueo.
+        </p>
+      </div>
+    } @else {
+
+      <!-- ===== TARJETAS RESUMEN ===== -->
+      <div class="grid-resumen">
+        <div class="tarjeta resumen">
+          <span class="etiqueta-resumen">Efectivo cobrado hoy</span>
+          <span class="monto-resumen menta">{{ soles(c.efectivoDelDia) }}</span>
+          <span class="detalle-resumen">{{ c.cantidadVentas }} venta{{ c.cantidadVentas !== 1 ? 's' : '' }} registrada{{ c.cantidadVentas !== 1 ? 's' : '' }}</span>
+        </div>
+        <div class="tarjeta resumen">
+          <span class="etiqueta-resumen">Transferencias</span>
+          <span class="monto-resumen indigo">{{ soles(c.totalTransferencias) }}</span>
+          <span class="detalle-resumen">Validadas con N° de operación</span>
+        </div>
+      </div>
+
+      <!-- ===== DETALLE DEL EFECTIVO ===== -->
+      <div class="tarjeta">
+        <h3 class="titulo-seccion">Detalle del efectivo</h3>
+        <div class="filas">
+          <div class="fila">
+            <span>Fondo inicial de caja</span>
+            <span class="valor">{{ soles(c.fondoInicial) }}</span>
+          </div>
+          <div class="fila">
+            <span>Ventas en efectivo del día</span>
+            <span class="valor positivo">+ {{ soles(c.efectivoDelDia) }}</span>
+          </div>
+          <div class="fila">
+            <span>Desembolsos del día</span>
+            <span class="valor negativo">− {{ soles(c.desembolsos) }}</span>
+          </div>
+          <div class="fila total">
+            <span>Efectivo esperado en caja</span>
+            <span class="valor">{{ soles(c.efectivoEsperado) }}</span>
+          </div>
+        </div>
+
+        <!-- ===== TRANSFERENCIAS (informativo) ===== -->
+        @if (c.transferencias.length > 0) {
+          <div class="bloque-transferencias">
+            <div class="cabecera-transferencias">
+              <h3 class="titulo-seccion">Transferencias</h3>
+              <span class="badge-indigo">Validadas con N° de operación</span>
+            </div>
+            <div class="filas">
+              @for (t of c.transferencias; track t.canal) {
+                <div class="fila">
+                  <span>{{ canalBonito(t.canal) }}</span>
+                  <span class="valor">{{ soles(t.total) }}</span>
+                </div>
+              }
+              <div class="fila total">
+                <span>Total transferencias</span>
+                <span class="valor indigo">{{ soles(c.totalTransferencias) }}</span>
+              </div>
+            </div>
+            <p class="nota">
+              No se requiere conteo físico — cada transferencia fue validada con su
+              número de operación al momento del cobro.
+            </p>
+          </div>
+        }
+
+        <!-- ===== CONTEO FÍSICO ===== -->
+        <div class="conteo-fisico">
+          <h4 class="titulo-conteo">Conteo físico de efectivo</h4>
+
+          <label class="etiqueta-campo" for="efectivoContado">Efectivo contado (S/)</label>
+          <div class="grupo-campo">
+            <span class="prefijo">S/</span>
+            <input
+              id="efectivoContado"
+              type="number"
+              min="0"
+              step="0.01"
+              class="campo-moneda"
+              [disabled]="confirmado()"
+              placeholder="0.00"
+              [ngModel]="efectivoContado()"
+              (ngModelChange)="efectivoContado.set($event)" />
+          </div>
+
+          @if (diferencia !== null) {
+            @if (cuadra) {
+              <p class="dif cuadra">✓ Cuadra — diferencia de S/ 0.00</p>
+            } @else {
+              <p class="dif" [class.sobrante]="diferencia! > 0" [class.faltante]="diferencia! < 0">
+                {{ diferencia! > 0 ? 'Sobrante' : 'Faltante' }}: S/ {{ abs(diferencia!).toFixed(2) }}
+              </p>
+            }
+          }
+        </div>
+
+        <!-- ===== MENSAJE DE ESTADO ===== -->
+        @if (efectivoContado() !== '') {
+          @if (cuadra) {
+            <div class="mensaje-estado ok">✓ Caja cuadrada — no hay diferencias en efectivo</div>
+          } @else {
+            <div class="mensaje-estado error">
+              Diferencia en efectivo: {{ diferencia! >= 0 ? '+' : '−' }} {{ soles(diferencia!) }}
+            </div>
+          }
+        }
+
+        <!-- ===== CONFIRMACIÓN ===== -->
+        @if (confirmado()) {
+          <div class="mensaje-estado ok final">
+            <i class="bi bi-check-circle-fill"></i>
+            Arqueo confirmado
+            @if (c.fechaArqueo) {
+              · {{ c.fechaArqueo | date:'dd/MM/yyyy HH:mm' }}
+            }
+          </div>
+          <p class="nota-habilitado">
+            La caja está habilitada para el desembolso y el cierre.
+          </p>
+        } @else {
+          <button
+            type="button"
+            class="btn-confirmar"
+            [disabled]="confirmando() || bloqueado"
+            (click)="confirmar()">
+            @if (confirmando()) {
+              <i class="bi bi-arrow-repeat girar"></i> Confirmando…
+            } @else {
+              Confirmar arqueo
+            }
+          </button>
+        }
+
+        @if (aviso(); as a) {
+          <p class="aviso" [class.error]="a.tipo === 'error'" [class.ok]="a.tipo === 'ok'">
+            {{ a.texto }}
+          </p>
+        }
+      </div>
+
+      <!-- ===== DESEMBOLSOS ===== -->
+      @if (c.desembolsosDetalle.length > 0) {
+        <div class="tarjeta">
+          <h3 class="titulo-seccion">
+            Desembolsos del día ({{ soles(c.desembolsos) }})
+          </h3>
+          <div class="filas">
+            @for (d of c.desembolsosDetalle; track d.fecha) {
+              <div class="fila">
+                <span>{{ d.descripcion }}</span>
+                <span class="valor negativo">− {{ soles(d.monto) }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  }
+</div>

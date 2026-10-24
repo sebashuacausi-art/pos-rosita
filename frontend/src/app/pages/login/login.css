@@ -1,0 +1,138 @@
+/* Pantalla de login - estilo vintage papelería del prototipo */
+.pantalla-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fondo);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 178, 63, 0.10) 0%, transparent 40%),
+    radial-gradient(circle at 88% 82%, rgba(59, 79, 216, 0.08) 0%, transparent 40%);
+  padding: 24px;
+}
+
+.caja-login {
+  width: 100%;
+  max-width: 380px;
+}
+
+/* --- Marca --- */
+.marca {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.marca .logo {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  background: var(--tinta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(30, 42, 74, 0.28);
+}
+
+.nombre-negocio {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--tinta);
+  margin: 0 0 4px;
+}
+
+.lema {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* --- Formulario --- */
+.formulario {
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: var(--sombra-lg);
+}
+
+.titulo-form {
+  font-size: 1.25rem;
+  margin: 0 0 2px;
+}
+
+.subtitulo-form {
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+  margin: 0 0 20px;
+}
+
+/* Campo con ícono a la izquierda */
+.grupo-campo {
+  position: relative;
+}
+
+.icono-campo {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--tinta-muted);
+  font-size: 0.95rem;
+  z-index: 5;
+}
+
+.campo-con-icono {
+  padding-left: 40px;
+}
+
+/* --- Error --- */
+.alerta-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--rojo-pale);
+  color: var(--rojo);
+  border: 1px solid rgba(229, 72, 77, 0.25);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* --- Botón --- */
+.btn-ingresar {
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  border-radius: 12px;
+}
+
+/* --- Ayuda --- */
+.ayuda {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.etiqueta-ayuda {
+  display: inline-block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--texto-suave);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.datos-ayuda {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: var(--tinta-muted);
+  flex-wrap: wrap;
+}
+
+.datos-ayuda i {
+  color: var(--amarillo-dark);
+  margin-right: 3px;
+}

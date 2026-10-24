@@ -1,0 +1,81 @@
+<div class="pantalla-login">
+
+  <div class="caja-login">
+
+    <!-- Marca -->
+    <div class="marca">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <path d="M5 5h12v2H7v14h14V11h2v12H5V5z" fill="#EAB308"/>
+          <path d="M10 9h7v1.5h-7zM10 12h7v1.5h-7zM10 15h5v1.5h-5z" fill="#FDFBF7"/>
+        </svg>
+      </div>
+      <h1 class="nombre-negocio">Librería Bazar Rosita</h1>
+      <p class="lema">Papelería escolar · Sistema POS</p>
+    </div>
+
+    <!-- Formulario -->
+    <form class="tarjeta formulario" (ngSubmit)="ingresar()" #formLogin="ngForm">
+      <h2 class="titulo-form">Iniciar sesión</h2>
+      <p class="subtitulo-form">Ingrese su ID numérico y su clave</p>
+
+      <div class="mb-3">
+        <label class="form-label" for="usuario">ID de usuario</label>
+        <div class="grupo-campo">
+          <i class="bi bi-person-fill icono-campo"></i>
+          <input
+            id="usuario"
+            name="usuario"
+            type="text"
+            class="form-control campo-con-icono"
+            placeholder="Ej. 123456"
+            [(ngModel)]="usuario"
+            autocomplete="off"
+            inputmode="numeric" />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="clave">Clave</label>
+        <div class="grupo-campo">
+          <i class="bi bi-lock-fill icono-campo"></i>
+          <input
+            id="clave"
+            name="clave"
+            type="password"
+            class="form-control campo-con-icono"
+            placeholder="••••••"
+            [(ngModel)]="clave"
+            autocomplete="off" />
+        </div>
+      </div>
+
+      @if (error()) {
+        <div class="alerta-error">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="btn btn-amarillo w-100 btn-ingresar"
+        [disabled]="cargando()">
+        @if (cargando()) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Ingresar al sistema
+      </button>
+    </form>
+
+    <!-- Ayuda rápida -->
+    <div class="ayuda">
+      <span class="etiqueta-ayuda">Accesos de prueba</span>
+      <div class="datos-ayuda">
+        <span><i class="bi bi-person-badge"></i> Vendedor: 123456</span>
+        <span><i class="bi bi-star-fill"></i> Dueño: 654321</span>
+      </div>
+    </div>
+
+  </div>
+</div>

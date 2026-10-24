@@ -1,0 +1,267 @@
+/* ============================================================
+   POS Librería Bazar Rosita - Estilos globales
+   Paleta "vintage papelería" tomada del diseño de Figma
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+
+:root {
+  /* --- Paleta principal --- */
+  --tinta: #1E2A4A;
+  --tinta-light: #2A3B6B;
+  --tinta-muted: #3D4E72;
+
+  --indigo: #3B4FD8;
+  --indigo-light: #5468E8;
+  --indigo-pale: #EEF0FB;
+
+  --amarillo: #FFB23F;
+  --amarillo-dark: #E89B28;
+  --amarillo-pale: #FFF4E0;
+
+  --menta: #16A67C;
+  --menta-light: #1DC495;
+  --menta-pale: #E4F7F0;
+
+  --rojo: #E5484D;
+  --rojo-pale: #FDEBEC;
+
+  --fuschia: #C94A6D;
+  --fuschia-pale: #FBEAEE;
+
+  --fondo: #FDFBF7;
+  --fondo-gris: #F4F5F9;
+
+  --borde: #E8E6DE;
+  --borde-suave: #F0EEE7;
+
+  --texto: #1E2A4A;
+  --texto-suave: #6B7280;
+
+  /* --- Sombras --- */
+  --sombra-sm: 0 1px 2px rgba(30, 42, 74, 0.06);
+  --sombra-md: 0 2px 8px rgba(30, 42, 74, 0.08);
+  --sombra-lg: 0 8px 24px rgba(30, 42, 74, 0.12);
+  --sombra-xl: 0 16px 48px rgba(30, 42, 74, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, 'Segoe UI', sans-serif;
+  background-color: var(--fondo);
+  color: var(--texto);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Títulos con la tipografía editorial del prototipo */
+h1, h2, h3, h4, .font-titulo {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--tinta);
+  font-weight: 700;
+}
+
+/* ============================================================
+   BOTONES (reemplazan los defaults de Bootstrap)
+   ============================================================ */
+.btn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(59, 79, 216, 0.25);
+}
+
+/* Acción principal: Cobrar / Nueva venta / Aperturar */
+.btn-amarillo {
+  background: var(--amarillo);
+  color: var(--tinta);
+  border-color: var(--amarillo);
+  box-shadow: 0 2px 6px rgba(255, 178, 63, 0.35);
+}
+.btn-amarillo:hover { background: var(--amarillo-dark); border-color: var(--amarillo-dark); color: var(--tinta); }
+
+/* Confirmación / enlaces / foco */
+.btn-indigo {
+  background: var(--indigo);
+  color: #fff;
+  border-color: var(--indigo);
+}
+.btn-indigo:hover { background: var(--indigo-light); border-color: var(--indigo-light); color: #fff; }
+
+/* Éxito */
+.btn-menta {
+  background: var(--menta);
+  color: #fff;
+  border-color: var(--menta);
+}
+.btn-menta:hover { background: var(--menta-light); border-color: var(--menta-light); color: #fff; }
+
+/* Peligro */
+.btn-rojo {
+  background: var(--rojo);
+  color: #fff;
+  border-color: var(--rojo);
+}
+.btn-rojo:hover { background: #d63b40; border-color: #d63b40; color: #fff; }
+
+/* Contorno neutro */
+.btn-contorno {
+  background: #fff;
+  color: var(--tinta);
+  border-color: var(--borde);
+}
+.btn-contorno:hover { background: var(--fondo-gris); color: var(--tinta); }
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   TARJETAS
+   ============================================================ */
+.tarjeta {
+  background: #fff;
+  border: 1px solid var(--borde-suave);
+  border-radius: 14px;
+  box-shadow: var(--sombra-sm);
+}
+
+/* ============================================================
+   FORMULARIOS
+   ============================================================ */
+.form-control, .form-select {
+  border-radius: 10px;
+  border-color: var(--borde);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.9rem;
+  color: var(--texto);
+  background-color: #fff;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px rgba(59, 79, 216, 0.15);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--tinta-muted);
+  margin-bottom: 0.3rem;
+}
+
+.form-text { font-size: 0.75rem; }
+
+/* ============================================================
+   BADGES / ETIQUETAS
+   ============================================================ */
+.badge-menta { background: var(--menta-pale); color: var(--menta); font-weight: 600; }
+.badge-rojo { background: var(--rojo-pale); color: var(--rojo); font-weight: 600; }
+.badge-amarillo { background: var(--amarillo-pale); color: #B4771A; font-weight: 600; }
+.badge-indigo { background: var(--indigo-pale); color: var(--indigo); font-weight: 600; }
+.badge-tinta { background: var(--tinta); color: #fff; font-weight: 600; }
+.badge-fuschia { background: var(--fuschia-pale); color: var(--fuschia); font-weight: 600; }
+
+/* ============================================================
+   TABLAS
+   ============================================================ */
+.tabla-rosita {
+  --bs-table-bg: transparent;
+  margin-bottom: 0;
+}
+.tabla-rosita thead th {
+  background: var(--fondo-gris);
+  color: var(--tinta-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  border-bottom: 1px solid var(--borde-suave);
+  padding: 0.7rem 0.9rem;
+  white-space: nowrap;
+}
+.tabla-rosita tbody td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--borde-suave);
+  vertical-align: middle;
+  color: var(--texto);
+}
+.tabla-rosita tbody tr:hover { background: #FCFBF8; }
+
+/* ============================================================
+   MODALES (Bootstrap 5) - tono vintage papelería
+   ============================================================ */
+.modal-content {
+  border: none;
+  border-radius: 18px;
+  box-shadow: var(--sombra-xl);
+  overflow: hidden;
+}
+.modal-header {
+  border-bottom: 1px solid var(--borde-suave);
+  padding: 1.1rem 1.4rem;
+  background: #fff;
+}
+.modal-title { font-family: 'Playfair Display', serif; font-weight: 700; }
+.modal-body { padding: 1.4rem; }
+.modal-footer {
+  border-top: 1px solid var(--borde-suave);
+  padding: 0.9rem 1.4rem;
+  background: #FCFBF8;
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+.texto-suave { color: var(--texto-suave); }
+.texto-menta { color: var(--menta); }
+.texto-rojo { color: var(--rojo); }
+.texto-amarillo { color: var(--amarillo-dark); }
+.texto-indigo { color: var(--indigo); }
+
+.fw-semibold { font-weight: 600; }
+.fw-bold { font-weight: 700; }
+
+.monto {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #D8D5CC; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #C4C0B5; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Toast/aviso flotante simple */
+.aviso-flotante {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  border-radius: 12px;
+  padding: 0.9rem 1.2rem;
+  box-shadow: var(--sombra-lg);
+  font-weight: 600;
+  animation: subir 0.25s ease;
+}
+@keyframes subir {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
